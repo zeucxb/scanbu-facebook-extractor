@@ -4,18 +4,11 @@ import (
 	"fmt"
 	"net/http"
 	"scanbu-api/helpers"
-	"scanbu-api/modules/data-extractor/lib"
 	"scanbu-api/modules/product/models"
 	"strings"
 
 	"gopkg.in/mgo.v2/bson"
 )
-
-var groups = []string{
-	"193939064109587",
-	"1088976661131866",
-	"415451778499368",
-}
 
 // Search is the search handler
 func Search(w http.ResponseWriter, r *http.Request) {
@@ -42,7 +35,5 @@ func Search(w http.ResponseWriter, r *http.Request) {
 
 			fmt.Fprintf(w, "%s", bytes)
 		}
-
-		go lib.Proccess(groups)
 	}
 }

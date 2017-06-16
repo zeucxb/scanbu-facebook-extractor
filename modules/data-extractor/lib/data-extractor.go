@@ -2,18 +2,24 @@ package lib
 
 import (
 	"fmt"
+	"os"
+	"os/signal"
 	"scanbu-api/configs"
 	"scanbu-api/modules/product/models"
+	"syscall"
 
 	"sync"
 	"time"
 
+	log "github.com/Sirupsen/logrus"
 	fb "github.com/huandu/facebook"
 )
 
 var wg sync.WaitGroup
+var stop chan bool
 
 func init() {
+	stop = make(chan bool, 1)
 	fb.Version = "v2.3"
 }
 
@@ -38,32 +44,64 @@ func getGroupFeedByIDAndSince(groupID string, since time.Time) (feed []models.Pr
 	return
 }
 
-func saveData(groupID string, since time.Time, async bool) {
-	if async {
-		defer wg.Done()
-	}
+func saveData(groupID string, since time.Time) {
+	defer wg.Done()
 
 	feeds, err := getGroupFeedByIDAndSince(groupID, since)
 	if err != nil {
+		log.Warn(err)
 		return
 	}
 
 	for _, feed := range feeds {
 		err = models.Products().Insert(feed)
-
-		if err == nil {
-			fmt.Println("ok")
-			fmt.Println(feed.Attachments)
+		if err != nil {
+			log.Warn(err)
+			return
 		}
-		fmt.Println(err)
 	}
 }
 
-func Proccess(groupIDs []string) {
-	for _, groupID := range groupIDs {
-		wg.Add(1)
-		go saveData(groupID, time.Now(), true)
-	}
+// ExtractorProcess is the data extractor process
+func ExtractorProcess() {
+	defer os.Exit(0)
+
+	sigs := make(chan os.Signal, 1)
+
+	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
+
+	ticker := time.NewTicker(time.Second * 10)
+
+	wg.Add(1)
+
+	go func() {
+		for range ticker.C {
+			groupIDs := []string{
+				"193939064109587",
+				"1088976661131866",
+				"415451778499368",
+			}
+
+			for _, groupID := range groupIDs {
+				select {
+				case <-stop:
+					return
+				default:
+					wg.Add(1)
+					go saveData(groupID, time.Now())
+				}
+			}
+		}
+	}()
+
+	go func() {
+		defer wg.Done()
+
+		<-sigs
+		stop <- true
+		log.Info("System turning off")
+		ticker.Stop()
+	}()
 
 	wg.Wait()
 }
