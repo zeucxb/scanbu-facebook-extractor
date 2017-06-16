@@ -1,12 +1,12 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
+	"scanbu-api/helpers"
 	"scanbu-api/modules/data-extractor/lib"
 	"scanbu-api/modules/product/models"
 	"strings"
-
-	"github.com/pressly/chi/render"
 
 	"gopkg.in/mgo.v2/bson"
 )
@@ -35,10 +35,14 @@ func Search(w http.ResponseWriter, r *http.Request) {
 		}
 
 		if err := models.Products().Find(query).All(&products); err == nil {
-			render.Status(r, http.StatusOK)
-			render.JSON(w, r, products)
+			bytes, err := helpers.JSONMarshal(products, true)
+			if err != nil {
+				panic(err)
+			}
+
+			fmt.Fprintf(w, "%s", bytes)
 		}
 
-		lib.Proccess(groups)
+		go lib.Proccess(groups)
 	}
 }
