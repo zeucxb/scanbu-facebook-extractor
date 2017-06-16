@@ -8,6 +8,8 @@ import (
 	"strings"
 
 	"gopkg.in/mgo.v2/bson"
+
+	log "github.com/Sirupsen/logrus"
 )
 
 // Search is the search handler
@@ -21,19 +23,39 @@ func Search(w http.ResponseWriter, r *http.Request) {
 		query := bson.M{
 			"message": bson.M{
 				"$regex": bson.RegEx{
-					Pattern: search,
+					Pattern: fmt.Sprintf("\b%s\b", search),
 					Options: "i",
 				},
 			},
 		}
 
 		if err := models.Products().Find(query).All(&products); err == nil {
-			bytes, err := helpers.JSONMarshal(products, true)
-			if err != nil {
-				panic(err)
-			}
+			if len(products) > 0 {
+				bytes, err := helpers.JSONMarshal(products, true)
+				if err != nil {
+					log.Fatal(err)
+				}
 
-			fmt.Fprintf(w, "%s", bytes)
+				fmt.Fprintf(w, "%s", bytes)
+			} else {
+				query = bson.M{
+					"message": bson.M{
+						"$regex": bson.RegEx{
+							Pattern: search,
+							Options: "i",
+						},
+					},
+				}
+
+				if err := models.Products().Find(query).All(&products); err == nil {
+					bytes, err := helpers.JSONMarshal(products, true)
+					if err != nil {
+						log.Fatal(err)
+					}
+
+					fmt.Fprintf(w, "%s", bytes)
+				}
+			}
 		}
 	}
 }
