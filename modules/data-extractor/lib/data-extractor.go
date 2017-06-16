@@ -80,6 +80,7 @@ func ExtractorProcess() {
 				"193939064109587",
 				"1088976661131866",
 				"415451778499368",
+				"581149701917314",
 			}
 
 			for _, groupID := range groupIDs {
