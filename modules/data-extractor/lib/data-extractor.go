@@ -30,7 +30,7 @@ func getGroupFeedByIDAndSince(groupID string, since time.Time) (feed []models.Pr
 	// feed.until(2017 - 05 - 20).since(2017 - 05 - 19)
 
 	groupPath := fmt.Sprintf("/%s", groupID)
-	fieldsQuery := "feed.limit(100){message,type,picture,full_picture,created_time,description,from,target,attachments{media},permalink_url}"
+	fieldsQuery := "feed{message,type,picture,full_picture,created_time,description,from,target,attachments{media},permalink_url}"
 
 	res, err := fb.Get(groupPath, fb.Params{
 		"fields":       fieldsQuery,
@@ -70,7 +70,7 @@ func ExtractorProcess() {
 
 	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
 
-	ticker := time.NewTicker(time.Second * 10)
+	ticker := time.NewTicker(time.Minute * 5)
 
 	wg.Add(1)
 
