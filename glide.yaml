@@ -7,3 +7,4 @@ import:
 - package: github.com/Sirupsen/logrus
   version: ^1.0.0
 - package: gopkg.in/mgo.v2
+- package: github.com/goware/cors
