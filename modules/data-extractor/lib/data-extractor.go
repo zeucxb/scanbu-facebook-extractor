@@ -25,12 +25,12 @@ func init() {
 
 func getGroupFeedByIDAndSince(groupID string, since time.Time) (feed []models.Product, err error) {
 	// sinceStr := since.Format("2006-01-02")
-	sinceStr := "2017-01-01"
+	// sinceStr := "2017-01-01"
 
 	// feed.until(2017 - 05 - 20).since(2017 - 05 - 19)
 
 	groupPath := fmt.Sprintf("/%s", groupID)
-	fieldsQuery := fmt.Sprintf("feed.since(%s){message,type,picture,full_picture,created_time,description,from,target,attachments{media},permalink_url}", sinceStr)
+	fieldsQuery := "feed.limit(100){message,type,picture,full_picture,created_time,description,from,target,attachments{media},permalink_url}"
 
 	res, err := fb.Get(groupPath, fb.Params{
 		"fields":       fieldsQuery,
