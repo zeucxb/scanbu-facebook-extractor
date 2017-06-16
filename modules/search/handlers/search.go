@@ -11,6 +11,12 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
+var groups = []string{
+	"193939064109587",
+	"1088976661131866",
+	"415451778499368",
+}
+
 // Search is the search handler
 func Search(w http.ResponseWriter, r *http.Request) {
 	q := r.URL.Query()
@@ -33,6 +39,6 @@ func Search(w http.ResponseWriter, r *http.Request) {
 			render.JSON(w, r, products)
 		}
 
-		lib.Proccess([]string{"193939064109587"})
+		lib.Proccess(groups)
 	}
 }

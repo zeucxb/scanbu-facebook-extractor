@@ -13,8 +13,13 @@ import (
 
 var wg sync.WaitGroup
 
+func init() {
+	fb.Version = "v2.3"
+}
+
 func getGroupFeedByIDAndSince(groupID string, since time.Time) (feed []models.Product, err error) {
-	sinceStr := since.Format("2006-01-02")
+	// sinceStr := since.Format("2006-01-02")
+	sinceStr := "2017-01-01"
 
 	// feed.until(2017 - 05 - 20).since(2017 - 05 - 19)
 
