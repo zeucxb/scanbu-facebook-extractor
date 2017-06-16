@@ -1,6 +1,21 @@
-hash: 782bd289edad0c82e863f33aafa0f22162a379b8631a46b45c4b7b5075d7c107
-updated: 2017-06-15T01:12:11.365311381-03:00
+hash: 87555b420da7bcf1f80178aaedb83c97677624fe461ccb5c7bc666d0c2309778
+updated: 2017-06-15T22:20:54.068117998-03:00
 imports:
+- name: github.com/huandu/facebook
+  version: efe962f32209aa6e7430fb779bdf29bbcdb716e1
 - name: github.com/pressly/chi
   version: e6033ea75479391a4bce3918fc119cad31e1cb30
+- name: github.com/Sirupsen/logrus
+  version: 202f25545ea4cf9b191ff7f846df5d87c9382c2b
+- name: golang.org/x/sys
+  version: fb4cac33e3196ff7f507ab9b2d2a44b0142f5b5a
+  subpackages:
+  - unix
+- name: gopkg.in/mgo.v2
+  version: 3f83fa5005286a7fe593b055f0d7771a7dce4655
+  subpackages:
+  - bson
+  - internal/json
+  - internal/sasl
+  - internal/scram
 testImports: []

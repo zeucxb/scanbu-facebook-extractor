@@ -2,3 +2,8 @@ package: scanbu-api
 import:
 - package: github.com/pressly/chi
   version: ^2.1.0
+- package: github.com/huandu/facebook
+  version: ^1.8.1
+- package: github.com/Sirupsen/logrus
+  version: ^1.0.0
+- package: gopkg.in/mgo.v2
