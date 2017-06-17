@@ -28,7 +28,8 @@ func FacebookBotReceiver(w http.ResponseWriter, r *http.Request) {
 		for _, msg := range entry.Messaging {
 			userID := msg.Sender.ID
 
-			if msg.Message != nil {
+			switch {
+			case msg.Message != nil:
 				log.Info("Msg received with content:", msg.Message.Text)
 				msng.SendTextMessage(userID, "Hello there")
 
@@ -41,7 +42,6 @@ func FacebookBotReceiver(w http.ResponseWriter, r *http.Request) {
 
 				// ok, message is ready, lets send
 				msng.SendMessage(gm)
-			}
 		}
 	}
 }
