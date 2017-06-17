@@ -31,6 +31,8 @@ func FacebookBotReceiver(w http.ResponseWriter, r *http.Request) {
 			switch {
 			case msg.Message != nil:
 				log.Info("Msg received with content:", msg.Message.Text)
+				log.Println("Msg received with content:", msg.Message.Text)
+
 				msng.SendTextMessage(userID, "Hello there")
 
 				gm := msng.NewGenericMessage(userID)
@@ -42,6 +44,11 @@ func FacebookBotReceiver(w http.ResponseWriter, r *http.Request) {
 
 				// ok, message is ready, lets send
 				msng.SendMessage(gm)
+			case msg.Delivery != nil:
+				log.Println("Delivery received with content:", msg.Delivery)
+			case msg.Postback != nil:
+				log.Println("Postback received with content:", msg.Postback.Payload)
+			}
 		}
 	}
 }
