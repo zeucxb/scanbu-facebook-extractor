@@ -18,7 +18,7 @@ func Search(search string) (products []models.Product, err error) {
 		},
 	}
 
-	if err = models.Products().Find(query).All(&products); err == nil {
+	if err = models.Products().Find(query).Sort("createdTime").All(&products); err == nil {
 		if len(products) > 0 {
 			return products, nil
 		}
@@ -32,7 +32,7 @@ func Search(search string) (products []models.Product, err error) {
 			},
 		}
 
-		if err = models.Products().Find(query).All(&products); err == nil {
+		if err = models.Products().Find(query).Sort("createdTime").All(&products); err == nil {
 			return products, nil
 		}
 
