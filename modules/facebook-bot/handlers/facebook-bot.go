@@ -7,5 +7,5 @@ import (
 
 // FacebookBot is the facebook bot webhook handler
 func FacebookBot(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "%s", "scanbu-s3Cr3t")
+	fmt.Fprintf(w, "%s", "776250382")
 }
