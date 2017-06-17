@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"net/http"
+	"scanbu-api/modules/search/lib"
 
 	log "github.com/Sirupsen/logrus"
 	messenger "github.com/mileusna/facebook-messenger"
@@ -19,10 +20,7 @@ func FacebookBot(w http.ResponseWriter, r *http.Request) {
 
 // FacebookBotReceiver is the facebook bot message receiver handler
 func FacebookBotReceiver(w http.ResponseWriter, r *http.Request) {
-	fbRequest, err := messenger.DecodeRequest(r)
-	if err != nil {
-		log.Info("Err:", err)
-	}
+	fbRequest, _ := messenger.DecodeRequest(r)
 
 	for _, entry := range fbRequest.Entry {
 		for _, msg := range entry.Messaging {
@@ -30,20 +28,30 @@ func FacebookBotReceiver(w http.ResponseWriter, r *http.Request) {
 
 			switch {
 			case msg.Message != nil:
-				log.Info("Msg received with content:", msg.Message.Text)
-				log.Println("Msg received with content:", msg.Message.Text)
+				search := msg.Message.Text
+				products, err := lib.Search(search)
+				if err != nil {
+					gm := msng.NewGenericMessage(userID)
+					for i, product := range products {
+						if i == 2 || i == len(products)-1 {
+							btn1 := msng.NewWebURLButton("Ver Mais", "http://mysite.com/contact")
+							gm.AddNewElement(product.Message, "", product.Link, product.Picture, []messenger.Button{btn1})
+							break
+						}
 
-				msng.SendTextMessage(userID, "Hello there")
+						gm.AddNewElement(product.Message, "", product.Link, product.Picture, nil)
+					}
 
-				gm := msng.NewGenericMessage(userID)
-				gm.AddNewElement("Title", "Subtitle", "http://mysite.com", "http://mysite.com/some-photo.jpeg", nil)
+					if len(products) == 0 {
+						msng.SendTextMessage(userID, "Não encontramos nada :(")
+					}
 
-				btn1 := msng.NewWebURLButton("Contact US", "http://mysite.com/contact")
-				btn2 := msng.NewPostbackButton("Ok", "THIS_DATA_YOU_WILL_RECEIVE_AS_POSTBACK_WHEN_USER_CLICK_THE_BUTTON")
-				gm.AddNewElement("Site title", "Subtitle", "http://mysite.com", "http://mysite.com/some-photo.jpeg", []messenger.Button{btn1, btn2})
+					msng.SendMessage(gm)
+					return
+				}
 
-				// ok, message is ready, lets send
-				msng.SendMessage(gm)
+				msng.SendTextMessage(userID, "Tivemos um problema na busca do seu produto :(")
+				msng.SendTextMessage(userID, "Tente novamente mais tarde :)")
 			case msg.Delivery != nil:
 				log.Println("Delivery received with content:", msg.Delivery)
 			case msg.Postback != nil:
