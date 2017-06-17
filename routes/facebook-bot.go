@@ -8,4 +8,5 @@ import (
 
 func fbotRoute(route *chi.Mux) {
 	route.Get("/fbot", handlers.FacebookBot)
+	route.Post("/fbot", handlers.FacebookBotReceiver)
 }

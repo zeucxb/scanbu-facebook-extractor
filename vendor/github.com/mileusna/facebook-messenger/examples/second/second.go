@@ -1,25 +1,32 @@
-package handlers
+package main
 
 import (
 	"log"
 	"net/http"
 
-	messenger "github.com/mileusna/facebook-messenger"
+	"github.com/mileusna/facebook-messenger"
 )
 
 // use public messenger for simpler code demonstration
 var msng = &messenger.Messenger{
-	AccessToken: "EAAS1E2CpgCYBAFa5FqXcgsmCpbDfjrnDLp3EUbPQjTINi2Dae7CSKqYeaZBloGx3ZAnZAOVU2W4RrtCA9oUIS4xCzzCRKZBsOdlz5KtCDKJGhEZAxwmu7gZCqHZAwRwI7bXJfEl4z4lk9q55nzE8ZCC87z6saML24VBc7CZCGwQi4TzCYJrIzXuuH",
-	PageID:      "1871739449816952",
+	AccessToken: "YOUR_ACCESS_TOKEN_THAT_YOU_WILL_GENERATE_FOR_YOUR_PAGE_ON_FACEBOOK",
+	PageID:      "YOUR_PAGE_ID",
 }
 
-// FacebookBot is the facebook bot webhook handler
-func FacebookBot(w http.ResponseWriter, r *http.Request) {
-	msng.VerifyWebhook(w, r)
+// Please check the First example First, it contains more example code for sending messages
+// If you don't want to use events receivers like in First example, this is another approach
+// that will give you entire FacebookRequest struct received from the Facebook so you can
+// use it however you like
+func main() {
+	// set URL for your webhook and you handler func
+	http.HandleFunc("/mychatbot", myHandler)
+	http.ListenAndServe(":8008", nil)
 }
 
-// FacebookBotReceiver is the facebook bot message receiver handler
-func FacebookBotReceiver(w http.ResponseWriter, r *http.Request) {
+// myHandler is you regular http Handler
+func myHandler(w http.ResponseWriter, r *http.Request) {
+
+	msng.VerifyWebhook(w, r)                   // verify webhook if asked from Facebook
 	fbRequest, _ := messenger.DecodeRequest(r) // decode entire request received from Facebook into FacebookRequest struct
 
 	// now you have it all and you can do whatever you want with received request

@@ -1,12 +1,16 @@
-hash: 69eda7978feec7303c47c0968a8afe4ad1b5e450017e274793d23b81102266a6
-updated: 2017-06-16T16:24:17.608455401-03:00
+hash: 5be033078758ab5e7900fc3f00702117457059d7f564ec7760437c37c7ce5e3e
+updated: 2017-06-17T16:00:52.692038363-03:00
 imports:
 - name: github.com/goware/cors
   version: 6ad15f4e1489e41776ee8b008597eafea9a67fd9
 - name: github.com/huandu/facebook
   version: efe962f32209aa6e7430fb779bdf29bbcdb716e1
+- name: github.com/mileusna/facebook-messenger
+  version: 1b8dc0bd6096ce81a6b82c2336c7c15830699ebf
 - name: github.com/pressly/chi
   version: e6033ea75479391a4bce3918fc119cad31e1cb30
+  subpackages:
+  - render
 - name: github.com/Sirupsen/logrus
   version: 202f25545ea4cf9b191ff7f846df5d87c9382c2b
 - name: golang.org/x/sys
