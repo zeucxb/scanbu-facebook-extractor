@@ -21,7 +21,7 @@ func FacebookBot(w http.ResponseWriter, r *http.Request) {
 func FacebookBotReceiver(w http.ResponseWriter, r *http.Request) {
 	fbRequest, err := messenger.DecodeRequest(r)
 	if err != nil {
-		return
+		log.Info("Err:", err)
 	}
 
 	for _, entry := range fbRequest.Entry {
