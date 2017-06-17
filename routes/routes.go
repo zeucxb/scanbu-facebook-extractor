@@ -21,4 +21,5 @@ func init() {
 	R.Use(cors.Handler)
 
 	searchRoute(R)
+	fbotRoute(R)
 }
