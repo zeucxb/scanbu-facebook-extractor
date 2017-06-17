@@ -1,13 +1,12 @@
 package handlers
 
 import (
-	"log"
 	"net/http"
 
+	log "github.com/Sirupsen/logrus"
 	messenger "github.com/mileusna/facebook-messenger"
 )
 
-// use public messenger for simpler code demonstration
 var msng = &messenger.Messenger{
 	AccessToken: "EAAS1E2CpgCYBAFa5FqXcgsmCpbDfjrnDLp3EUbPQjTINi2Dae7CSKqYeaZBloGx3ZAnZAOVU2W4RrtCA9oUIS4xCzzCRKZBsOdlz5KtCDKJGhEZAxwmu7gZCqHZAwRwI7bXJfEl4z4lk9q55nzE8ZCC87z6saML24VBc7CZCGwQi4TzCYJrIzXuuH",
 	PageID:      "1871739449816952",
@@ -20,29 +19,28 @@ func FacebookBot(w http.ResponseWriter, r *http.Request) {
 
 // FacebookBotReceiver is the facebook bot message receiver handler
 func FacebookBotReceiver(w http.ResponseWriter, r *http.Request) {
-	fbRequest, _ := messenger.DecodeRequest(r) // decode entire request received from Facebook into FacebookRequest struct
+	fbRequest, err := messenger.DecodeRequest(r)
+	if err != nil {
+		return
+	}
 
-	// now you have it all and you can do whatever you want with received request
-	// enumerate each entry, and each message in entry
 	for _, entry := range fbRequest.Entry {
-		// pageID := entry.ID  // here you can find page id that received message
 		for _, msg := range entry.Messaging {
-			userID := msg.Sender.ID // user that sent you a message
+			userID := msg.Sender.ID
 
-			// but "message" can be text message, delivery report or postback, so check it what it is
-			// it can only be one of this, so we use switch
-			switch {
-			case msg.Message != nil:
-				log.Println("Msg received with content:", msg.Message.Text)
+			if msg.Message != nil {
+				log.Info("Msg received with content:", msg.Message.Text)
 				msng.SendTextMessage(userID, "Hello there")
-				// check First example for more sending messages examples
 
-			case msg.Delivery != nil:
-				// delivery report received, check First example what to do next
+				gm := msng.NewGenericMessage(userID)
+				gm.AddNewElement("Title", "Subtitle", "http://mysite.com", "http://mysite.com/some-photo.jpeg", nil)
 
-			case msg.Postback != nil:
-				// postback received, check First example what can you do with that
-				log.Println("Postback received with content:", msg.Postback.Payload)
+				btn1 := msng.NewWebURLButton("Contact US", "http://mysite.com/contact")
+				btn2 := msng.NewPostbackButton("Ok", "THIS_DATA_YOU_WILL_RECEIVE_AS_POSTBACK_WHEN_USER_CLICK_THE_BUTTON")
+				gm.AddNewElement("Site title", "Subtitle", "http://mysite.com", "http://mysite.com/some-photo.jpeg", []messenger.Button{btn1, btn2})
+
+				// ok, message is ready, lets send
+				msng.SendMessage(gm)
 			}
 		}
 	}
