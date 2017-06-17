@@ -4,6 +4,8 @@ import (
 	"net/http"
 	"scanbu-api/modules/search/lib"
 
+	"fmt"
+
 	log "github.com/Sirupsen/logrus"
 	messenger "github.com/mileusna/facebook-messenger"
 )
@@ -31,27 +33,26 @@ func FacebookBotReceiver(w http.ResponseWriter, r *http.Request) {
 				search := msg.Message.Text
 				products, err := lib.Search(search)
 				if err != nil {
-					gm := msng.NewGenericMessage(userID)
-					for i, product := range products {
-						if i == 2 || i == len(products)-1 {
-							btn1 := msng.NewWebURLButton("Ver Mais", "http://mysite.com/contact")
-							gm.AddNewElement(product.Message, "", product.Link, product.Picture, []messenger.Button{btn1})
-							break
-						}
-
-						gm.AddNewElement(product.Message, "", product.Link, product.Picture, nil)
+					msng.SendTextMessage(userID, "Tivemos um problema na busca do seu produto :(")
+					msng.SendTextMessage(userID, "Tente novamente mais tarde :)")
+				}
+				gm := msng.NewGenericMessage(userID)
+				for i, product := range products {
+					if i == 2 || i == len(products)-1 {
+						btn1 := msng.NewWebURLButton("Ver Mais", fmt.Sprintf("http://scanbu.com/search?keyword=%s", search))
+						gm.AddNewElement(product.Message, "", product.Link, product.Picture, []messenger.Button{btn1})
+						break
 					}
 
-					if len(products) == 0 {
-						msng.SendTextMessage(userID, "Não encontramos nada :(")
-					}
-
-					msng.SendMessage(gm)
-					return
+					gm.AddNewElement(product.Message, "", product.Link, product.Picture, nil)
 				}
 
-				msng.SendTextMessage(userID, "Tivemos um problema na busca do seu produto :(")
-				msng.SendTextMessage(userID, "Tente novamente mais tarde :)")
+				if len(products) == 0 {
+					msng.SendTextMessage(userID, "Não encontramos nada :(")
+				}
+
+				msng.SendMessage(gm)
+				return
 			case msg.Delivery != nil:
 				log.Println("Delivery received with content:", msg.Delivery)
 			case msg.Postback != nil:

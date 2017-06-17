@@ -18,12 +18,14 @@ func Search(w http.ResponseWriter, r *http.Request) {
 
 		products, err := lib.Search(search)
 		if err != nil {
-			bytes, err := helpers.JSONMarshal(products, true)
-			if err != nil {
-				log.Fatal(err)
-			}
-
-			fmt.Fprintf(w, "%s", bytes)
+			log.Fatal(err)
 		}
+
+		bytes, err := helpers.JSONMarshal(products, true)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		fmt.Fprintf(w, "%s", bytes)
 	}
 }
