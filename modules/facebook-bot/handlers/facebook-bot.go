@@ -31,6 +31,7 @@ func FacebookBotReceiver(w http.ResponseWriter, r *http.Request) {
 			switch {
 			case msg.Message != nil:
 				search := msg.Message.Text
+
 				products, err := lib.Search(search)
 				if err != nil {
 					msng.SendTextMessage(userID, "Tivemos um problema na busca do seu produto :(")
@@ -40,11 +41,11 @@ func FacebookBotReceiver(w http.ResponseWriter, r *http.Request) {
 				for i, product := range products {
 					if i == 2 || i == len(products)-1 {
 						btn1 := msng.NewWebURLButton("Ver Mais", fmt.Sprintf("http://scanbu.com/search?keyword=%s", search))
-						gm.AddNewElement(product.Message, "", product.Link, product.Picture, []messenger.Button{btn1})
+						gm.AddNewElement(product.Message, "", product.Link, product.FullPicture, []messenger.Button{btn1})
 						break
 					}
 
-					gm.AddNewElement(product.Message, "", product.Link, product.Picture, nil)
+					gm.AddNewElement(product.Message, "", product.Link, product.FullPicture, nil)
 				}
 
 				if len(products) == 0 {
