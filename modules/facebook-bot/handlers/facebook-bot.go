@@ -42,6 +42,7 @@ func FacebookBotReceiver(w http.ResponseWriter, r *http.Request) {
 					if i == 2 || i == len(products)-1 {
 						btn1 := msng.NewWebURLButton("Ver Mais", fmt.Sprintf("http://scanbu.com/search?keyword=%s", search))
 						gm.AddNewElement(product.Message, "", product.Link, product.FullPicture, []messenger.Button{btn1})
+						fmt.Println(product.Link)
 						break
 					}
 
