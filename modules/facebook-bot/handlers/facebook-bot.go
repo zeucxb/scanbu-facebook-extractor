@@ -36,6 +36,7 @@ func FacebookBotReceiver(w http.ResponseWriter, r *http.Request) {
 				if err != nil {
 					msng.SendTextMessage(userID, "Tivemos um problema na busca do seu produto :(")
 					msng.SendTextMessage(userID, "Tente novamente mais tarde :)")
+					return
 				}
 				gm := msng.NewGenericMessage(userID)
 				for i, product := range products {
@@ -50,6 +51,7 @@ func FacebookBotReceiver(w http.ResponseWriter, r *http.Request) {
 
 				if len(products) == 0 {
 					msng.SendTextMessage(userID, "Não encontramos nada :(")
+					return
 				}
 
 				msng.SendMessage(gm)
