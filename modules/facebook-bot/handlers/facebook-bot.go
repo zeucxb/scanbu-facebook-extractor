@@ -59,6 +59,10 @@ func FacebookBotReceiver(w http.ResponseWriter, r *http.Request) {
 			case msg.Delivery != nil:
 				log.Println("Delivery received with content:", msg.Delivery)
 			case msg.Postback != nil:
+				if msg.Postback.Payload == "GET_STARTED_PAYLOAD" {
+					msng.SendTextMessage(userID, "Bem vindo, ao Scanbü.")
+					msng.SendTextMessage(userID, "Para começar é só digitar o produto que está procurando. :D")
+				}
 				log.Println("Postback received with content:", msg.Postback.Payload)
 			}
 		}
