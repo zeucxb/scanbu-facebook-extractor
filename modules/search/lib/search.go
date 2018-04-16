@@ -2,7 +2,7 @@ package lib
 
 import (
 	"fmt"
-	"scanbu-api/modules/product/models"
+	"scanbu-extractor/modules/product/models"
 
 	"gopkg.in/mgo.v2/bson"
 )

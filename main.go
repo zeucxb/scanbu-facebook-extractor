@@ -2,10 +2,10 @@ package main
 
 import (
 	"net/http"
-	"scanbu-api/helpers"
-	"scanbu-api/helpers/database"
-	"scanbu-api/modules/data-extractor/lib"
-	"scanbu-api/routes"
+	"scanbu-extractor/helpers"
+	"scanbu-extractor/helpers/database"
+	"scanbu-extractor/modules/data-extractor/lib"
+	"scanbu-extractor/routes"
 
 	log "github.com/Sirupsen/logrus"
 )

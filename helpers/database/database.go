@@ -1,7 +1,7 @@
 package database
 
 import (
-	"scanbu-api/helpers"
+	"scanbu-extractor/helpers"
 
 	log "github.com/Sirupsen/logrus"
 	mgo "gopkg.in/mgo.v2"
@@ -46,7 +46,7 @@ func DB(dbName string) {
 }
 
 func getDBName() (strcon string) {
-	return helpers.GetENVorDefault("DB_NAME", "scanbu-api")
+	return helpers.GetENVorDefault("DB_NAME", "scanbu-extractor")
 }
 
 func setDB(dbName string) {

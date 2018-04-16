@@ -1,4 +1,4 @@
-package: scanbu-api
+package: scanbu-extractor
 import:
 - package: github.com/pressly/chi
   version: ^2.1.0

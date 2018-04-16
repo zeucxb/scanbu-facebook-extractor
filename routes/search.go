@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"scanbu-api/modules/search/handlers"
+	"scanbu-extractor/modules/search/handlers"
 
 	"github.com/pressly/chi"
 )

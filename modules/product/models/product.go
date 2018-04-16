@@ -1,7 +1,7 @@
 package models
 
 import (
-	"scanbu-api/helpers/database"
+	"scanbu-extractor/helpers/database"
 
 	mgo "gopkg.in/mgo.v2"
 )

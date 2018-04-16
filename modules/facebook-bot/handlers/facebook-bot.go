@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"net/http"
-	"scanbu-api/modules/search/lib"
+	"scanbu-extractor/modules/search/lib"
 
 	"fmt"
 

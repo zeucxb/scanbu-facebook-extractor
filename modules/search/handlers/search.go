@@ -3,8 +3,8 @@ package handlers
 import (
 	"fmt"
 	"net/http"
-	"scanbu-api/helpers"
-	"scanbu-api/modules/search/lib"
+	"scanbu-extractor/helpers"
+	"scanbu-extractor/modules/search/lib"
 
 	log "github.com/Sirupsen/logrus"
 )

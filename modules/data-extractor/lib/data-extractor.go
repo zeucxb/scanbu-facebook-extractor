@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
-	"scanbu-api/configs"
-	"scanbu-api/modules/product/models"
+	"scanbu-extractor/configs"
+	"scanbu-extractor/modules/product/models"
 	"syscall"
 
 	"sync"

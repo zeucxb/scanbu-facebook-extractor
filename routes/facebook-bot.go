@@ -3,7 +3,7 @@ package routes
 import (
 	"io/ioutil"
 	"net/http"
-	"scanbu-api/modules/facebook-bot/handlers"
+	"scanbu-extractor/modules/facebook-bot/handlers"
 
 	"fmt"
 
